@@ -1,4 +1,4 @@
-package com.example.ProductManagement.model.entities;
+package com.example.productmanagement.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

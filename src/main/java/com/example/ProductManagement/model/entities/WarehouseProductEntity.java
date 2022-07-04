@@ -1,4 +1,4 @@
-package com.example.ProductManagement.model.entities;
+package com.example.productmanagement.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter

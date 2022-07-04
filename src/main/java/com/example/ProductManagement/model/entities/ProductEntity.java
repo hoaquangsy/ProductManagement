@@ -1,14 +1,19 @@
-package com.example.ProductManagement.model.entities;
+package com.example.productmanagement.model.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.Length;
+
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -22,10 +27,11 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+
     @Column(name = "name")
+
     private String name;
 
-    @Column(name = "price")
     private BigDecimal price;
 
     @Column
@@ -36,6 +42,17 @@ public class ProductEntity {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "code")
+    private String code;
+
+    @Column(name = "createAt")
+    @CreationTimestamp
+    private Date createAt;
+
+    @Column(name = "modifiedAt")
+    @UpdateTimestamp
+    private Date modifiedAt;
 
     @ManyToOne
     @JoinColumn(name = "categoryId",nullable = false)

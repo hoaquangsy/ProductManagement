@@ -1,47 +1,53 @@
-package com.example.ProductManagement.controllers;
+package com.example.productmanagement.controllers;
 
-import com.example.ProductManagement.model.entities.CategoryEntity;
-import com.example.ProductManagement.model.entities.ProductEntity;
-import com.example.ProductManagement.repsitories.CategoryRepository;
+import com.example.productmanagement.model.dto.CategoryDto;
+import com.example.productmanagement.mapper.CategoryMapper;
+import com.example.productmanagement.model.entities.CategoryEntity;
+import com.example.productmanagement.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v2.0/category")
 public class CategoryController {
+
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryMapper mapper;
+
+    @Autowired
+    private CategoryService categoryService;
+
 
     @GetMapping("/getAllCategory")
     public ResponseEntity get(
             @RequestParam(value = "pages") int page,
             @RequestParam(value = "page_size") int pageSize
     ){
-        Page<CategoryEntity> categoryEntities=categoryRepository.findAll(PageRequest.of(page,pageSize));
-        return  ResponseEntity.ok(categoryEntities);
+         PageRequest pageRequest=PageRequest.of(page,pageSize);
+          return ResponseEntity.ok(categoryService.getPage(pageRequest));
     }
     //Post
     @PostMapping("/add")
-    public ResponseEntity addCategoryEntity(@RequestBody CategoryEntity categoryEntity) {
-        return ResponseEntity.ok(categoryRepository.save(categoryEntity));
+    public ResponseEntity addCategoryEntity(@Validated @RequestBody CategoryDto categoryDto) {
+        CategoryEntity categoryEntity=mapper.convertToEntity(categoryDto);
+        return ResponseEntity.ok(categoryService.addCategoryEntity(categoryEntity));
     }
 
     //update
     @PutMapping("update")
-    public ResponseEntity updateCategoryEntity(@RequestBody CategoryEntity categoryEntity){
-        return  ResponseEntity.ok(categoryRepository.save(categoryEntity));
+    public ResponseEntity updateCategoryEntity(@Validated @RequestBody CategoryDto categoryDto){
+        CategoryEntity categoryEntity=mapper.convertToEntity(categoryDto);
+        return  ResponseEntity.ok(categoryService.updateCategoryEntity(categoryEntity));
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(
             @PathVariable Integer id
     ) {
-        Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);
-        return ResponseEntity.ok("Thanh cong");
+       CategoryEntity category=categoryService.findById(id);
+        return ResponseEntity.ok(categoryService.deleteCategoryEntity(category));
     }
 
 }
